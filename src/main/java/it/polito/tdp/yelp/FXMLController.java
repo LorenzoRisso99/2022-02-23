@@ -45,16 +45,38 @@ public class FXMLController {
     
     @FXML
     void doRiempiLocali(ActionEvent event) {
+    	
     	this.cmbLocale.getItems().clear();
     	String citta = this.cmbCitta.getValue();
     	if(citta != null) {
     		//TODO popolare la tendina dei locali per la città selezionata
-    		
+    		cmbLocale.getItems().addAll(this.model.getLocali(citta));
     	}
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	txtResult.clear();
+    	
+    	String locale = cmbLocale.getValue().getBusinessName();
+    	
+    	if(locale == null) {
+    		txtResult.appendText("Seleziona un locale");
+    		return;
+    	}
+    	
+    	String citta = cmbCitta.getValue();
+    	
+    	if(citta == null) {
+    		txtResult.appendText("Seleziona una citta");
+    		return;
+    	}
+    	
+    	this.model.creaGrafo(locale, citta);
+    	txtResult.appendText("Grafo creato!\n");
+    	txtResult.appendText(String.format("# VERTICI: %d\n", this.model.nVertici()));
+    	txtResult.appendText(String.format("# ARCHI: %d\n", this.model.nArchi()));
     	
     }
 
@@ -75,5 +97,6 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	cmbCitta.getItems().addAll(this.model.getCity());
     }
 }
